@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "ChatApp.Api": {
+      "commandName": "Project"
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker"
+    }
+  }
+}
