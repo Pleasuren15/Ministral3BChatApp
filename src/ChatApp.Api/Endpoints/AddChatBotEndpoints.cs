@@ -1,5 +1,6 @@
 ﻿using Azure;
 using Azure.AI.Inference;
+using Microsoft.AspNetCore.Mvc;
 
 namespace ChatApp.Api.Endpoints
 {
@@ -16,11 +17,12 @@ namespace ChatApp.Api.Endpoints
         public static void MapAddChatBotEndpoints(this WebApplication app)
         {
             var chatGroup = app.MapGroup("/api/Chat");
-            chatGroup.MapGet("query", GetMistralResponse);
+            chatGroup.MapGet("query", GetPhiResponse);
         }
 
         // https://localhost:44332/api/Chat/query?query=what
-        private static IResult GetMistralResponse(string query, IConfiguration configuration)
+        [HttpGet("GetPhiResponse")]
+        private static IResult GetPhiResponse(string query, IConfiguration configuration)
         {
             var config = configuration.GetSection("AzureAiFoundry");
             var endpoint = new Uri(config.GetValue<string>("Endpoint")!);
