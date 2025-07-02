@@ -5,3 +5,7 @@
 /ChatApp.Api/.vs/ChatApp.Api
 /ChatApp.Api/ChatApp.Api/obj
 /ChatApp.Api/ChatApp.Api/bin/Debug/net9.0
+/.vs/ChatApp.Api
+/src/ChatApp.Api/.vs
+/src/ChatApp.Api/bin/Debug/net9.0
+/src/ChatApp.Api/obj
