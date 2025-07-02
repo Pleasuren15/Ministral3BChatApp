@@ -16,10 +16,11 @@ namespace ChatApp.Api.Endpoints
         public static void MapAddChatBotEndpoints(this WebApplication app)
         {
             var chatGroup = app.MapGroup("/api/Chat");
-            chatGroup.MapGet("query", GetMistralResponseAsync);
+            chatGroup.MapGet("query", GetMistralResponse);
         }
 
-        private static async Task<IResult> GetMistralResponseAsync(string query, IConfiguration configuration)
+        // https://localhost:44332/api/Chat/query?query=what
+        private static IResult GetMistralResponse(string query, IConfiguration configuration)
         {
             var config = configuration.GetSection("AzureAiFoundry");
             var endpoint = new Uri(config.GetValue<string>("Endpoint")!);

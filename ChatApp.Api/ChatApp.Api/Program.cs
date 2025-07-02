@@ -1,4 +1,5 @@
 ﻿using ChatApp.Api.Endpoints;
+using Microsoft.OpenApi.Models;
 
 namespace ChatApp.Api
 {
@@ -11,10 +12,27 @@ namespace ChatApp.Api
                 .AddJsonFile("appsettings.json");
             builder.Services.AddLogging();
 
+            //Add swagger services
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Title = "ChatApp API",
+                    Version = "v1"
+                });
+            });
+
             var app = builder.Build();
+            // Configure Swagger middleware
+            if (app.Environment.IsDevelopment())
+            {
+                app.UseSwagger();
+                app.UseSwaggerUI();
+            }
             app.MapAddChatBotEndpoints();
 
-            app.RunAsync();
+            app.Run();
         }
     }
 }

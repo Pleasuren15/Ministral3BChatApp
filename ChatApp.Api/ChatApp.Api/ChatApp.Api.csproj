@@ -12,6 +12,7 @@
     <PackageReference Include="Azure.AI.Inference" Version="1.0.0-beta.5" />
     <PackageReference Include="Azure.Core" Version="1.46.2" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.22.1-Preview.1" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="9.0.1" />
   </ItemGroup>
 
 </Project>
