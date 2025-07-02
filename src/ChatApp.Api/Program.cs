@@ -12,6 +12,17 @@ namespace ChatApp.Api
                 .AddJsonFile("appsettings.json");
             builder.Services.AddLogging();
 
+            // Add CORS with open policy
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+                });
+            });
+
             //Add swagger services
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(c =>
@@ -30,6 +41,7 @@ namespace ChatApp.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors();
             app.MapAddChatBotEndpoints();
 
             app.Run();

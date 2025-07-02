@@ -1,190 +1,78 @@
-import React, { useState } from 'react';
-import './App.css';
-
-// GitHub color palette
-const githubColors = {
-  light: {
-    background: '#f6f8fa',
-    text: '#24292f',
-    inputBg: '#ffffff',
-    inputBorder: '#d0d7de',
-    buttonBg: '#2da44e',
-    buttonText: '#ffffff',
-    toggleBg: '#eaeef2',
-    toggleText: '#57606a',
-    messageBg: '#ffffff',
-    messageBorder: '#d0d7de'
-  },
-  dark: {
-    background: '#0d1117',
-    text: '#c9d1d9',
-    inputBg: '#161b22',
-    inputBorder: '#30363d',
-    buttonBg: '#238636',
-    buttonText: '#ffffff',
-    toggleBg: '#21262d',
-    toggleText: '#8b949e',
-    messageBg: '#161b22',
-    messageBorder: '#30363d'
-  }
-};
+import React, { useState } from "react";
+import "./App.css";
 
 function App() {
-  const [input, setInput] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [darkMode, setDarkMode] = useState(false);
-  const colors = darkMode ? githubColors.dark : githubColors.light;
+  const [prompt, setPrompt] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [content, setContent] = useState(""); // Add state for fetched content
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
-    setMessages([...messages, { role: 'user', text: input }]);
-    setInput('');
-    // Simulate API call
-    setMessages(msgs => [
-      ...msgs,
-      { role: 'assistant', text: 'Thinking...' }
-    ]);
-    // Replace this with your actual API call
-    setTimeout(() => {
-      setMessages(msgs => [
-        ...msgs.slice(0, -1),
-        { role: 'assistant', text: `Echo: ${input}` }
-      ]);
-    }, 1000);
+  const handleInputChange = (e) => setPrompt(e.target.value);
+
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      setLoading(true);
+      fetch(
+        `https://localhost:44332/api/Chat/query?query=${encodeURIComponent(
+          prompt
+        )}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setLoading(false);
+          setContent(data); // Set content state instead of manipulating DOM
+          console.log(data);
+        })
+        .catch((err) => {
+          setLoading(false);
+          console.error(err);
+        });
+    }
   };
 
   return (
-    <div
-      className="App"
-      style={{
-        background: colors.background,
-        color: colors.text,
-        minHeight: '100vh',
-        minWidth: '100vw',
-        width: '100vw',
-        height: '100vh',
-        fontFamily: 'Segoe UI, Arial, sans-serif',
-        transition: 'background 0.2s, color 0.2s',
-        display: 'flex',
-        flexDirection: 'column'
-      }}
-    >
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'flex-end',
-        alignItems: 'center',
-        maxWidth: '100vw',
-        height: '100vh',
-        padding: '2rem 1rem',
-        boxSizing: 'border-box'
-      }}>
-        <header style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center', width: '90vw', marginBottom: 24 }}>
-          {/* Removed the h1 header */}
-          <button
-            onClick={() => setDarkMode(dm => !dm)}
-            style={{
-              background: colors.toggleBg,
-              color: colors.toggleText,
-              border: 'none',
-              borderRadius: 6,
-              padding: '6px 16px',
-              cursor: 'pointer',
-              fontWeight: 500
-            }}
-            aria-label="Toggle dark mode"
-          >
-            {darkMode ? '🌙 Dark' : '☀️ Light'}
-          </button>
-        </header>
-        <div
-          style={{
-            background: colors.messageBg,
-            border: `1px solid ${colors.messageBorder}`,
-            borderRadius: 8,
-            padding: 16,
-            minHeight: 200,
-            marginBottom: 24,
-            overflowY: 'auto',
-            boxShadow: darkMode ? '0 1px 4px #010409' : '0 1px 4px #d0d7de',
-            width: '90vw',
-            flex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end'
-          }}
-        >
-          {messages.length === 0 && (
-            <div style={{ color: colors.toggleText, fontStyle: 'italic' }}>
-              Start a conversation with Copilot!
-            </div>
-          )}
-          {messages.map((msg, idx) => (
-            <div
-              key={idx}
-              style={{
-                marginBottom: 12,
-                textAlign: msg.role === 'user' ? 'right' : 'left'
-              }}
-            >
-              <span
-                style={{
-                  display: 'inline-block',
-                  background: msg.role === 'user' ? colors.buttonBg : colors.inputBg,
-                  color: msg.role === 'user' ? colors.buttonText : colors.text,
-                  padding: '8px 14px',
-                  borderRadius: 16,
-                  maxWidth: '80%',
-                  wordBreak: 'break-word',
-                  border: msg.role === 'assistant' ? `1px solid ${colors.inputBorder}` : 'none',
-                  fontSize: 16
-                }}
-              >
-                {msg.text}
-              </span>
-            </div>
-          ))}
-        </div>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: 12, width: '90vw' }}>
-          <textarea
-            value={input}
-            onChange={e => setInput(e.target.value)}
-            rows={3}
-            placeholder="Ask Copilot anything..."
-            style={{
-              resize: 'none',
-              background: colors.inputBg,
-              color: colors.text,
-              border: `1px solid ${colors.inputBorder}`,
-              borderRadius: 6,
-              padding: 12,
-              fontSize: 16,
-              outline: 'none',
-              fontFamily: 'inherit',
-              width: '90%'
-            }}
-            required
+    <div>
+      <div className="top-bar">
+        <input
+          className="prompt-input"
+          type="text"
+          placeholder="Enter your prompt here..."
+          value={prompt}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+        />
+      </div>
+      <div className="info-space">
+        <div className="info-left">
+          <span>PleasureNdhlovu</span>
+          <img
+            src="https://cdn-avatars.huggingface.co/v1/production/uploads/1583646260758-5e64858c87403103f9f1055d.png"
+            width="15"
+            height="15"
+            alt="Hugging Face Logo"
           />
-          <button
-            type="submit"
+          <span>microsoft/phi-4</span>
+        </div>
+      </div>
+
+      <div className="content">
+        {loading ? (
+          <div
             style={{
-              background: colors.buttonBg,
-              color: colors.buttonText,
-              border: 'none',
-              borderRadius: 6,
-              padding: '10px 0',
-              fontWeight: 600,
-              fontSize: 16,
-              cursor: 'pointer',
-              boxShadow: darkMode ? '0 1px 2px #010409' : '0 1px 2px #d0d7de',
-              width: '90%'
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
             }}
           >
-            Send
-          </button>
-        </form>
+            <span className="spinner" />
+            <span>Loading...</span>
+          </div>
+        ) : (
+          <>
+            {content
+              ? content
+              : "Your asnwers to your prompt will be displayed here."}
+          </>
+        )}
       </div>
     </div>
   );

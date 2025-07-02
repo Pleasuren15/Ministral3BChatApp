@@ -1,4 +1,15 @@
-:root {
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Prompt Input System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
         --bg-dark: #282c34;
         --text-dark: #abb2bf;
         --accent-green: #98c379;
@@ -56,6 +67,7 @@
         box-shadow: 0 0 5px var(--accent-green);
       }
 
+      
       .info-space {
         display: flex;
         flex-direction: row;
@@ -70,27 +82,38 @@
         display: flex;
         align-items: center;
         gap: 6px;
-        margin-bottom: 5px;
       }
 
       .info-space,
       .content {
         margin: 0 var(--margin-sides);
       }
+      
+    </style>
+  </head>
+  <body>
+    <div class="top-bar">
+      <input
+        class="prompt-input"
+        type="text"
+        placeholder="Enter your prompt here..."
+      />
+    </div>
+    <div class="info-space">
+      <div class="info-left">
+        <span>PleasureNdhlovu</span>
+        <img
+          src="https://cdn-avatars.huggingface.co/v1/production/uploads/1583646260758-5e64858c87403103f9f1055d.png"
+          width="15"
+          height="15"
+          alt="Hugging Face Logo"
+        />
+        <span>microsoft/phi-4</span>
+      </div>
+    </div>
 
-      .spinner {
-        width: 18px;
-        height: 18px;
-        border: 3px solid var(--accent-green);
-        border-top: 3px solid transparent;
-        border-radius: 50%;
-        display: inline-block;
-        animation: spin 1s linear infinite;
-        margin-right: 10px;
-      }
-
-      @keyframes spin {
-        100% {
-          transform: rotate(360deg);
-        }
-      }
+    <div class="content">
+      sdiuhaui my content goes here. This is a placeholder for the main content area where you can display information, results, or any other relevant data related to the prompt input system.
+    </div>
+  </body>
+</html>
